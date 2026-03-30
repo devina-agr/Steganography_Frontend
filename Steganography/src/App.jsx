@@ -6,10 +6,14 @@ import Landing from "./pages/Landing";
 import AuthPage from "./pages/Auth";
 import UserDashboard from "./pages/UserDashboard";
 import AdminDashboard from "./pages/AdminDashboard";
+import ForgotPassword from "./pages/ForgotPassword";
+import ResetPassword from "./pages/ResetPassword";
+import ConfirmEmailChanges from "./pages/ConfirmEmailChanges";
 
 // Components
 import ProtectedRoute from "./components/ProtectedRoute";
 import AdminRoute from "./components/AdminRoute";
+import ConfirmEmail from "./components/ConfirmEmail";
 
 function App() {
   return (
@@ -41,6 +45,10 @@ function App() {
             </div>
           }
         />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
+        <Route path="/confirm-email" element={<ConfirmEmail />} />
+        <Route path="/confirm-email-change" element={<ConfirmEmailChanges />} />
       </Routes>
     </BrowserRouter>
   );

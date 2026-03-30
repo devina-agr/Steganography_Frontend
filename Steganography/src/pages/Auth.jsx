@@ -18,36 +18,56 @@ export default function AuthPage() {
     localStorage.setItem("role", JSON.stringify(data.role || []));
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+ const handleSubmit = async (e) => {
+  e.preventDefault();
 
-    try {
-      const res = isLogin
-        ? await loginUser(form)
-        : await registerUser(form);
+  try {
+    const res = isLogin
+      ? await loginUser(form)
+      : await registerUser(form);
 
-      console.log("API RESPONSE:", res.data);
+    console.log("API RESPONSE:", res.data);
 
-      // NO CONTEXT
-      saveUser(res.data);
+    // 🔥 clear old auth completely
+    localStorage.clear();
 
-      toast.success(isLogin ? "Login successful" : "Registered");
+    // save new auth
+    localStorage.setItem("token", res.data.token);
+    localStorage.setItem("email", res.data.email);
+    localStorage.setItem("role", JSON.stringify(res.data.role || []));
 
-      if (res.data.role?.includes("ADMIN")) {
-        navigate("/admin");
-      } else {
-        navigate("/dashboard");
-      }
+    toast.success(isLogin ? "Login successful" : "Registered");
 
-    } catch (err) {
-      console.error("ERROR:", err);
-      toast.error(
-        err?.response?.data?.message ||
-        err.message ||
-        "Something went wrong"
-      );
-    }
-  };
+    // 🔥 force reload
+    const rolesRaw = res.data.role;
+
+const roles = Array.isArray(rolesRaw)
+  ? rolesRaw
+  : typeof rolesRaw === "string"
+  ? [rolesRaw]
+  : [];
+
+console.log("ROLES:", roles); // 🔥 DEBUG
+
+localStorage.setItem("token", res.data.token);
+localStorage.setItem("email", res.data.email);
+localStorage.setItem("role", JSON.stringify(roles));
+
+if (roles.some(r => r.toUpperCase() === "ADMIN")) {
+  window.location.href = "/admin";
+} else {
+  window.location.href = "/dashboard";
+}
+
+  } catch (err) {
+    console.error("ERROR:", err);
+    toast.error(
+      err?.response?.data?.message ||
+      err.message ||
+      "Something went wrong"
+    );
+  }
+};
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-900">
@@ -60,6 +80,7 @@ export default function AuthPage() {
           <input
             type="email"
             placeholder="Email"
+              value={form.email} 
             className="w-full p-3 border rounded mb-4"
             onChange={(e) =>
               setForm({ ...form, email: e.target.value })
@@ -69,12 +90,18 @@ export default function AuthPage() {
           <input
             type="password"
             placeholder="Password"
+            value={form.password}  
             className="w-full p-3 border rounded mb-4"
             onChange={(e) =>
               setForm({ ...form, password: e.target.value })
             }
           />
-
+          <p
+  className="text-blue-500 text-sm cursor-pointer mt-2"
+  onClick={() => window.location.href = "/forgot-password"}
+>
+  Forgot Password?
+</p><br/>
           <button className="w-full bg-blue-600 text-white py-3 rounded hover:bg-blue-700">
             {isLogin ? "Login" : "Register"}
           </button>

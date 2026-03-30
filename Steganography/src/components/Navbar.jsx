@@ -1,4 +1,3 @@
-// src/components/Navbar.jsx
 
 import { useAuth } from "../context/authContext";
 import { Link, useNavigate } from "react-router-dom";
@@ -17,12 +16,7 @@ export default function Navbar() {
       <h1 className="text-xl font-bold">StegoApp</h1>
 
       <div className="flex gap-4 items-center">
-        {!user && (
-          <Link to="/auth" className="hover:text-blue-400">
-            Login
-          </Link>
-        )}
-
+        
         {user && (
           <>
             <Link to="/dashboard" className="hover:text-blue-400">

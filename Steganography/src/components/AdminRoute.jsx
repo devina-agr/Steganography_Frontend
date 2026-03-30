@@ -1,21 +1,16 @@
-// src/components/AdminRoute.jsx
-
 import { Navigate, Outlet } from "react-router-dom";
-import { useAuth } from "../context/authContext";
 
 export default function AdminRoute() {
-  const { user } = useAuth(); 
+  const token = localStorage.getItem("token");
+  const roles = JSON.parse(localStorage.getItem("role") || "[]");
 
-  // ❌ not logged in
-  if (!user) {
+  if (!token) {
     return <Navigate to="/auth" replace />;
   }
 
-  // ❌ not admin
-  if (!user.role?.includes("ADMIN")) {
+  if (!roles.includes("ADMIN")) {
     return <Navigate to="/dashboard" replace />;
   }
 
-  // ✅ admin access
   return <Outlet />;
 }
