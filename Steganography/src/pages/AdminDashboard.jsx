@@ -28,7 +28,7 @@ export default function AdminDashboard() {
   const [logs, setLogs] = useState([]);
   const [activeTab, setActiveTab] = useState("dashboard");
   const [inviteEmail, setInviteEmail] = useState("");
-  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const fetchData = async () => {
     try {
