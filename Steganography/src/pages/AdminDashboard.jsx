@@ -9,8 +9,6 @@ import {
   banUser,
 } from "../api/adminApi";
 import toast from "react-hot-toast";
-
-import ChangeEmail from "../components/ChangeEmail";
 import ChangePassword from "../components/ChangePassword";
 
 // ICONS
@@ -87,7 +85,6 @@ export default function AdminDashboard() {
   { key: "dashboard", label: "Dashboard", icon: LayoutDashboard },
   { key: "logs", label: "Audit Logs", icon: FileText },
   { key: "invite", label: "Invite Admin", icon: UserPlus },
-  { key: "email", label: "Change Email", icon: Mail },
   { key: "password", label: "Change Password", icon: KeyRound },
 ];
 
@@ -271,9 +268,6 @@ export default function AdminDashboard() {
             </button>
           </div>
         )}
-
-        {/* CHANGE EMAIL */}
-        {activeTab === "email" && <ChangeEmail />}
 
         {/* CHANGE PASSWORD */}
         {activeTab === "password" && <ChangePassword />}

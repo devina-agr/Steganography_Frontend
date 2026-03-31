@@ -9,6 +9,7 @@ import AdminDashboard from "./pages/AdminDashboard";
 import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
 import ConfirmEmailChanges from "./pages/ConfirmEmailChanges";
+import AdminRegister from "./pages/AdminRegister";
 
 // Components
 import ProtectedRoute from "./components/ProtectedRoute";
@@ -49,6 +50,7 @@ function App() {
         <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="/confirm-email" element={<ConfirmEmail />} />
         <Route path="/confirm-email-change" element={<ConfirmEmailChanges />} />
+        <Route path="/admin-register" element={<AdminRegister />} />
       </Routes>
     </BrowserRouter>
   );

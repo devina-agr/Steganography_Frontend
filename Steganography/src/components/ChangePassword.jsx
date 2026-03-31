@@ -1,7 +1,12 @@
 import { useState } from "react";
 import axios from "../api/axios";
 import toast from "react-hot-toast";
-import { useNavigate } from "react-router-dom";
+
+// ✅ error handler
+const getError = (err) =>
+  err?.response?.data?.message ||
+  err?.response?.data ||
+  "Error updating password";
 
 export default function ChangePassword() {
   const [data, setData] = useState({
@@ -9,30 +14,32 @@ export default function ChangePassword() {
     newPassword: "",
   });
 
-  const navigate = useNavigate();
-
   const handleSubmit = async (e) => {
-    e.preventDefault();
+  e.preventDefault();
+  try {
+   const role = localStorage.getItem("role") || "";
+const isAdmin = role.includes("ADMIN");
 
-    try {
-      // ✅ No ID needed now
-      await axios.put("/users/password", data);
+    const url = isAdmin
+      ? "/admin/password"
+      : "/users/password";
 
-      toast.success("Password updated. Please login again.");
+    await axios.put(url, data);
 
-      // ✅ logout after password change
-      localStorage.clear();
-window.location.href = "/auth";
+    toast.success("Password updated. Please login again.");
 
-    } catch (err) {
-      console.log(err);
-      toast.error(err?.response?.data || "Error updating password");
-    }
-  };
+    localStorage.clear();
+    window.location.href = "/auth";
+
+  } catch (err) {
+    console.log(err);
+    toast.error(getError(err));
+  }
+};
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-3 max-w-sm">
-      <h2 className="font-bold text-xl">Change Password</h2>
+    <form onSubmit={handleSubmit} className="space-y-3 max-w-sm mx-auto">
+      <h2 className="font-bold text-xl text-center">Change Password</h2>
 
       <input
         type="password"
@@ -56,15 +63,17 @@ window.location.href = "/auth";
         required
       />
 
-      <button className="bg-blue-500 text-white px-4 py-2 rounded w-full">
+      <button className="bg-blue-500 text-white px-4 py-2 rounded w-full hover:bg-blue-600">
         Update Password
       </button>
+
+      {/* Forgot password */}
       <p
-  className="text-sm text-blue-500 cursor-pointer mt-2 text-right"
-  onClick={() => window.location.href = "/forgot-password"}
->
-  Forgot Password?
-</p>
+        className="text-sm text-blue-500 cursor-pointer mt-2 text-right hover:underline"
+        onClick={() => (window.location.href = "/forgot-password")}
+      >
+        Forgot Password?
+      </p>
     </form>
   );
 }
